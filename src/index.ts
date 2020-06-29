@@ -1,5 +1,8 @@
+import path from 'path';
 import axios from 'axios';
-// import * as OPTIONS from './options';
+import ejs from 'ejs';
+import { IncomingMessage, ServerResponse } from 'http';
+import * as OPTIONS from './options';
 
 interface OPTIONS_PROPS {
   baseURL: string,
@@ -13,7 +16,7 @@ interface OPTIONS_PROPS {
   key:string
 }
 // const
-const MiddleWare = (options: OPTIONS_PROPS) => {
+export const AuthMiddleware = (options: OPTIONS_PROPS) => {
   // const USER_OPTIONS = options.dev ? OPTIONS.DEV_OPTION : OPTIONS.PROD_OPTION;
   const USER_OPTIONS = options;
   const { name } = USER_OPTIONS;
@@ -30,14 +33,23 @@ const MiddleWare = (options: OPTIONS_PROPS) => {
         email: typeof name === 'function' ? USER_OPTIONS.name(req, res) : name,
       },
     });
-    req.$nox = req.$nox || {};
-    req.$nox['mis-auth'] = {
-      ...req.$nox['mis-auth'],
+    req.$nox = {
+      ...req.$nox,
+    };
+    req.$nox.misAuth = {
+      ...req.$nox.misAuth,
       resList: data.data?.list || [],
     };
     next();
     // console.log(req, res, next);
   };
 };
+AuthMiddleware.OPTIONS = OPTIONS;
 
-export default MiddleWare;
+export const ErrorAuthMiddleware = async (req:IncomingMessage, res:ServerResponse, next) => {
+  if (!req.$nox.misAuth.resList.length) {
+    const html = await ejs.renderFile(path.resolve(__dirname, '../error.ejs'), {}, { async: true });
+    return res.end(html);
+  }
+  return next();
+};
