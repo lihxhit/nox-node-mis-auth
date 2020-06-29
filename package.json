@@ -1,6 +1,6 @@
 {
   "name": "nox-node-mis-auth",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "管理系统权限认证中间件",
   "author": {
     "name": "noxfed-lsn"
