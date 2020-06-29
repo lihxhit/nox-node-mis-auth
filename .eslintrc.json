@@ -20,7 +20,8 @@
             {
                 "ts": "never"
             }
-        ]
+        ],
+        "@typescript-eslint/no-unused-vars": [2, { "args": "none" }]
     },
     "ignorePatterns": "*.d.ts",
     "settings": {

@@ -1,9 +1,18 @@
 import path from 'path';
 import axios from 'axios';
 import ejs from 'ejs';
-import { IncomingMessage, ServerResponse } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import * as OPTIONS from './options';
 
+declare module 'http' {
+  interface IncomingMessage {
+    $nox:{
+      misAuth:{
+        resList:[]
+      }
+    }
+  }
+}
 interface OPTIONS_PROPS {
   baseURL: string,
   api: {
@@ -20,7 +29,7 @@ export const AuthMiddleware = (options: OPTIONS_PROPS) => {
   // const USER_OPTIONS = options.dev ? OPTIONS.DEV_OPTION : OPTIONS.PROD_OPTION;
   const USER_OPTIONS = options;
   const { name } = USER_OPTIONS;
-  return async (req, res, next) => {
+  return async (req:IncomingMessage, res, next) => {
     const { data } = await axios({
       url: USER_OPTIONS.api?.resList || '/services/auth/userResList',
       baseURL: USER_OPTIONS.baseURL,
