@@ -18,13 +18,14 @@ yarn install
 
 ```sh
 yarn dev
+yarn build
 ```
 
 ## Author
 
 👤 **lishaonan**
 
-* Github: [@lihx\_hit](https://github.com/lihx\_hit)
+* Github: [@lihxhit](https://github.com/lihxhit)
 
 ## Show your support
 
